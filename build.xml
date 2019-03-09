@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="cricket-bootstrap" default="all" basedir="." 
+         xmlns:if="ant:if"
+         xmlns:unless="ant:unless">
+    
+    <!-- ################################################################### -->
+    <!--                                                                     -->
+    <!-- BUILD CONFIGURATION                                                 -->
+    <!--                                                                     -->
+    <!-- Remember to modify the project name (see line 2 of this file)       -->
+    <!--                                                                     -->
+    <description>Cricket bootstrap project</description>
+    <property name="version" value="1.0"/> <!-- service version           -->
+    <property name="cricket-version" value="1.3.0-alpha.2" /> 
+    <property name="docker-repository" value="" />
+    <property name="minify-web-files" value="true" />
+    <property name="JDK-location" value=""/> <!-- will use default JDK -->
+    <!--<property name="JDK-location" value="/usr/lib/jvm/java-11-openjdk-amd64"/>-->
+    
+    <!-- configuration of libraries included in the distribution fat-jar     -->
+    <property name="cricket-jar-location" value="lib/cricket-${cricket-version}.jar"/>
+    
+    <!-- set value=false to exclude selected library                         -->
+    <property name="module-javamail" value="true"/> <!-- JavaMail reference implementation -->
+    <property name="javmail-version" value="1.6.2"/>
+    <property name="javamail-jar-location" value="lib/javax.mail-${javmail-version}.jar" />
+    
+    <property name="module-mqtt" value="true"/> <!-- JavaMail reference implementation -->
+    <property name="mqtt-version" value="3-1.2.0"/>
+    <property name="mqtt-jar-location" value="lib/org.eclipse.paho.client.mqttv${mqtt-version}.jar" />
+    <!--                                                                     -->
+    <!-- END OF CONFIGURATION                                                -->
+    <!-- ################################################################### -->
+
+    <!-- do not modify properties below -->
+    <property name="src" location="src/java"/>
+    <property name="src-js" location="src/js"/>
+    <property name="src-other" location="src/other"/>
+    <property name="build" location="build/classes"/>
+    <property name="dist" location="dist"/>
+    <property name="web" location="web"/>
+    <property name="lib" location="lib"/>
+    
+    <path id="project-classpath">
+        <pathelement location="${cricket-jar-location}"/>
+        <pathelement location="${javamail-jar-location}"/>
+        <pathelement location="${mqtt-jar-location}"/>
+    </path>
+
+    <target name="init">
+        <!-- Create the build directory structure used by compile -->
+        <mkdir dir="${build}"/>
+    </target>
+   
+    <target name="get-dependencies" description="upload Cricket MSF library and other dependencies">
+        <mkdir dir="${lib}"/>
+        <get
+            src="https://github.com/gskorupa/Cricket/releases/download/${cricket-version}/cricket-${cricket-version}.jar"
+            dest="lib/cricket-${cricket-version}.jar" 
+            usetimestamp="true" 
+            ignoreerrors="true"
+        />
+        <get
+            src="https://maven.java.net/content/repositories/releases/com/sun/mail/javax.mail/1.6.2/javax.mail-1.6.2.jar"
+            dest="lib/javax.mail-1.6.2.jar" 
+            usetimestamp="true" 
+            ignoreerrors="true"
+        />
+        <get
+            src="https://search.maven.org/remotecontent?filepath=org/eclipse/paho/org.eclipse.paho.client.mqttv3/1.2.0/org.eclipse.paho.client.mqttv3-1.2.0.jar"
+            dest="lib/org.eclipse.paho.client.mqttv3-1.2.0.jar" 
+            usetimestamp="true" 
+            ignoreerrors="true"
+        />
+    </target>
+
+    <target name="compile" depends="init" description="compile the source">
+        <!-- Compile the java code from ${src} into ${build} -->
+        <javac  unless:blank="${JDK-location}"
+                executable="${JDK-location}/bin/javac"
+                fork="true"
+                target="1.8" 
+                source="1.8" 
+                srcdir="${src}" 
+                destdir="${build}"
+                includeantruntime="false" 
+                debug="on"
+                classpathref="project-classpath"
+                verbose="false">
+            <!--<compilerarg value="-Xlint:unchecked"/>-->
+        </javac>
+        <javac if:blank="${JDK-location}"
+               target="1.8" 
+               source="1.8" 
+               srcdir="${src}" 
+               destdir="${build}"
+               includeantruntime="false" 
+               debug="on"
+               classpathref="project-classpath"
+               verbose="false">
+            <!--<compilerarg value="-Xlint:unchecked"/>-->
+        </javac>
+    </target>
+
+    <target name="dist" depends="clean, compile"
+            description="generate the distribution">
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist}"/>
+        <antcall inheritAll="true" target="jar"/>
+        <mkdir dir="${dist}/config"/>
+        <mkdir dir="${dist}/files"/>
+        <mkdir dir="${dist}/data"/>
+        <mkdir dir="${dist}/www"/>
+        <mkdir dir="${dist}/www/assets"/>
+        <mkdir dir="${dist}/var"/>
+        <mkdir dir="${dist}/log"/>
+        <echo/>
+        <input message="Please enter environment name [dev|production]:" addproperty="environment.name" defaultvalue="dev"/>
+        <echo message="Building archive for environment: ${environment.name}"/>
+        <delete file="${dist}/data/cricket_publickeystore.jks" failonerror="false"></delete>
+        <genkey alias="cricket" 
+                keystore="${dist}/data/cricket_publickeystore.jks" 
+                storetype="pkcs12"
+                storepass="mypass" 
+                keypass="mypass" 
+                keyalg="RSA" 
+                keysize="2048" 
+                validity="720">
+            <dname>
+                <param name="CN" value="myservice.com"/>
+                <param name="O" value="My Company"/>
+            </dname>
+        </genkey>
+        <copy todir="${dist}/www">
+            <fileset dir="www" excludes="**/*.svg,**/*.png,**/*.gif,**/*.jpg,**/*.jpeg,**/*.otf,,**/*.eot,**/*.ttf,**/*.woff,**/*.woff2"/>
+            <filterchain if:true="${minify-web-files}">
+                <tokenfilter>
+                    <deletecharacters chars="\r"/>
+                    <trim/>
+                    <ignoreblank/>
+                </tokenfilter>
+                <striplinecomments>
+                    <comment value="&lt;!"/>
+                </striplinecomments>
+            </filterchain>
+        </copy>
+        <copy todir="${dist}/www">
+            <fileset dir="www"/>
+        </copy>
+        <echo message="Building archive for environment ${environment.name}"/>
+        <copy todir="${dist}/config" file="${src-other}/environment/${environment.name}/cricket.json"/>
+        <copy todir="${dist}" file="${src-other}/environment/${environment.name}/cricket.service"/>
+        <copy todir="${dist}" file="${src-other}/environment/${environment.name}/cricket.sh"/>
+        <copy todir="${dist}" file="${src-other}/environment/${environment.name}/run.sh"/>
+        <copy todir="${dist}" file="${src-other}/environment/${environment.name}/readme.txt"/>
+        <replace file="${dist}/cricket.sh" token="{{distribution}}" value="${ant.project.name}-${version}"/>
+        <replace file="${dist}/run.sh" token="{{distribution}}" value="${ant.project.name}-${version}"/>
+        <zip basedir="dist" destfile="${ant.project.name}.zip"/>
+    </target>
+
+    <target name="clean" description="clean up">
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+    
+    <target name="jar">
+        <copy todir="${build}" overwrite="true">
+            <fileset dir="${src}" includes="*.json"/>
+            <fileset dir="${src}" includes="*.txt"/>
+        </copy>
+        <jar destfile="${dist}/${ant.project.name}-${version}.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.cricketmsf.Runner"/>
+            </manifest>
+            <zipfileset src="${cricket-jar-location}" excludes="**/*.json" includes="**/*"/>
+            <fileset dir="${build}" />
+            <!-- optional libraries -->
+            <zipfileset if:true="${module-javamail}" src="${javamail-jar-location}" includes="com/**/*,javax/**/*"/>
+            <zipfileset if:true="${module-mqtt}" src="${mqtt-jar-location}" includes="org/**/*"/>
+        </jar>
+    </target>
+    
+    <target name="docker-build" depends="dist" description="create new tagged image">
+        <!-- update Dockerfile -->
+        <copy file="${src-other}/environment/${environment.name}/Dockerfile.template" tofile="Dockerfile" overwrite="true"/>
+        <replace file="Dockerfile" token="{{version}}" value="${version}"/>
+        <exec executable="docker">
+            <arg value="build"/>
+            <arg value="-t"/>
+            <arg value="${docker-repository}/${ant.project.name}:${environment.name}-${version}"/>
+            <arg value="."/>
+        </exec>
+    </target>
+    
+    <target name="docker-push" description="push current image to the repository">
+        <input message="Please enter environment name [dev|production]:" addproperty="environment.name" defaultvalue="dev"/>
+        <echo message="Pushing container for environment: ${environment.name}"/>
+        <exec executable="docker">
+            <arg value="push"/>
+            <arg value="${docker-repository}/${ant.project.name}:${environment.name}-${version}"/>
+        </exec>
+    </target>
+
+</project>
