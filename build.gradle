@@ -1,0 +1,46 @@
+plugins {
+    id 'java'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_13
+    targetCompatibility = JavaVersion.VERSION_13
+}
+
+version = "0.0.1"
+
+repositories {
+    mavenCentral()
+    maven {
+            name = "CricketPackages"
+            url = uri("https://maven.pkg.github.com/gskorupa/cricket")
+            credentials {
+                username = 'gskorupa'
+                password = 'd58c48db0ee3ffcdbf96d28dc3b30b3aed1613bf' 
+            }
+        }
+    flatDir {
+        dirs 'lib'
+    }
+}
+
+dependencies {
+    implementation 'org.cricketmsf:cricket:1.5.13'
+    testImplementation 'junit:junit:4.13'
+}
+
+
+task fatJar(type: Jar) {
+    archiveClassifier = ''
+
+    from sourceSets.main.output
+
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.findAll { it.name.endsWith('jar') }.collect { zipTree(it) }
+    }
+    
+    manifest {
+        attributes 'Main-Class': 'org.cricketmsf.Runner'
+    }
+}

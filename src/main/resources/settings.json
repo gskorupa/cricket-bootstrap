@@ -1,0 +1,25 @@
+{
+    "@type": "org.cricketmsf.config.ConfigSet",
+    "description": "My service",
+    "services": [
+        {
+            "@type": "org.cricketmsf.config.Configuration",
+            "id": "MyService1",
+            "service": "myorg.myservice.Service",
+            "properties": {
+                "port": "8080",
+                "time-zone": "GMT"
+            },
+            "ports": [
+                {
+                    "name": "HelloAPI",
+                    "interfaceName": "",
+                    "classFullName": "myorg.myservice.in.http.HelloAdapter",
+                    "properties": {
+                        "context": "/api/hello"
+                    }
+                }
+            ]
+        }
+    ]
+}

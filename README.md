@@ -7,18 +7,12 @@ To start building a new microservice clone the repository as a new one and follo
 
 ## Requirements
 
-* Java Development Environment 1.8 or newer
-* Apache Ant
+* Java 13
+* Gredle build framework
 
 ## Getting started
 
-    git clone https://github.com/gskorupa/cricket-bootstrap.git myproject
-    ant get-dependencies
-    ant dist
-
-Now you can start development
-
-## Resources
-
-* Cricket Microservices Framework
-* ???
+```
+git clone https://github.com/gskorupa/cricket-bootstrap.git myproject
+gradle fatJar
+```
