@@ -20,14 +20,20 @@ import org.cricketmsf.event.EventIface;
 
 public class HelloEvent extends EventDecorator implements EventIface {
 
-    private String clientName;
-    public HelloEvent(String name) {
+    private String userName;
+    private String friendName;
+    public HelloEvent(String name, String friendName) {
         super();
-        clientName=name;
+        userName=name;
+        this.friendName=friendName;
     }
     
-    public String getClientName(){
-        return clientName;
+    public String getUserName(){
+        return userName;
+    }
+    
+    public String getFriendName(){
+        return friendName;
     }
     
 }

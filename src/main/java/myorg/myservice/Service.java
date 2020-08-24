@@ -26,23 +26,49 @@ import org.cricketmsf.in.http.StandardResult;
 import org.cricketmsf.services.BasicService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.HashMap;
 
 public class Service extends BasicService {
     
     private static final Logger logger = LoggerFactory.getLogger(Service.class);
+    
+    private HashMap<String, String> users;
 
     @EventHook(eventCategory = "*")
     public void processEvent(Event event) {
         logger.info(event.toLogString());
     }
 
-    @PortEventClassHook(className = "HelloEvent", procedureName = "helloProcedure")
+    @PortEventClassHook(className = "HelloEvent", procedureName = "sayHello")
     public Object handleGreeting(HelloEvent event) {
         Result result = new StandardResult();
-        String name = event.getClientName();
-        result.setData(String.format("Hello %1s", name));
+       
+        String name = event.getUserName();
+        //the name must be registered first
+        if(null==users.get(name)){
+            result.setCode(404);
+            result.setData("unknown user name\n");
+            result.setHeader("Content-type", "text/plain");
+            return result;        
+        }
+        String friendName= event.getFriendName();
+        if(friendName.isBlank()){
+            result.setData(String.format("Hello %1s!", name));
+        }else{
+            result.setData(String.format("Hello %1s! Greetings from %2s.", friendName,name));
+        }
         result.setHeader("Content-type", "text/plain");
         dispatchEvent(new MyEvent().data(name));
+        return result;
+    }
+    
+    @PortEventClassHook(className = "HelloEvent", procedureName = "addUser")
+    public Object handleAddUser(HelloEvent event) {
+        Result result = new StandardResult();
+        String name = event.getUserName();
+        users.put(name, name);
+        result.setData(String.format("User %1s added", name));
+        result.setHeader("Content-type", "text/plain");
         return result;
     }
    
@@ -53,5 +79,12 @@ public class Service extends BasicService {
 
     @Override
     public void getAdapters() {
+        super.getAdapters();
+    }
+    
+    @Override
+    public void runInitTasks(){
+        super.runInitTasks();
+        users=new HashMap<>();
     }
 }
