@@ -23,12 +23,12 @@ import org.cricketmsf.annotation.EventHook;
 import org.cricketmsf.annotation.PortEventClassHook;
 import org.cricketmsf.in.http.Result;
 import org.cricketmsf.in.http.StandardResult;
-import org.cricketmsf.services.BasicService;
+import org.cricketmsf.services.MinimalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 
-public class Service extends BasicService {
+public class Service extends MinimalService {
     
     private static final Logger logger = LoggerFactory.getLogger(Service.class);
     

@@ -8,7 +8,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_13
 }
 
-version = "0.0.2"
+version = "0.0.3"
 
 repositories {
     mavenCentral()
@@ -17,7 +17,7 @@ repositories {
             url = uri("https://maven.pkg.github.com/gskorupa/cricket")
             credentials {
                 username = 'gskorupa'
-                password = '863f05fa451ac60f2a11b58d294aaaf0bc0b2773' 
+                password = '19b9c60f768bdf2574c16b958b51c3abe6511d67' 
             }
         }
     flatDir {
@@ -26,7 +26,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.cricketmsf:cricket:1.5.23'
+    implementation 'org.cricketmsf:cricket:1.5.34'
     testImplementation 'junit:junit:4.13'
 }
 

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import myorg.myservice.events.HelloEvent;
 import org.cricketmsf.RequestObject;
 import org.cricketmsf.event.ProcedureCall;
+import org.cricketmsf.in.http.HttpAdapterIface;
 import org.cricketmsf.in.http.HttpPortedAdapter;
 import org.cricketmsf.in.openapi.Operation;
 import org.cricketmsf.in.openapi.Parameter;
@@ -33,12 +34,17 @@ import org.cricketmsf.in.openapi.SchemaType;
  *
  * @author Grzegorz Skorupa <g.skorupa at gmail.com>
  */
-public class HelloAdapter extends HttpPortedAdapter {
+public class HelloAdapter extends HttpPortedAdapter{
 
     public static int PARAM_NOT_FOUND = 1;
 
     public HelloAdapter() {
         super();
+    }
+    
+    @Override
+    public void loadProperties(HashMap<String, String> properties, String adapterName) {
+        super.loadProperties(properties, adapterName);
     }
 
     @Override
@@ -127,10 +133,11 @@ public class HelloAdapter extends HttpPortedAdapter {
     @Override
     public void defineApi() {
         // GET request definition
-        Operation getOp = new Operation()
+        Operation getOp = new Operation("GET")
                 .tag("hello")
                 .description("get greetings")
                 .summary("example get method")
+                .pathModifier("/{name}")
                 .parameter(
                         new Parameter(
                                 "name",
@@ -150,10 +157,10 @@ public class HelloAdapter extends HttpPortedAdapter {
                 .response(new Response("200").content("text/plain").description("response"))
                 .response(new Response("400").description("Invalid request parameters "))
                 .response(new Response("404").description("User name not found"));
-        addOperationConfig("GET", getOp);
+        addOperationConfig(getOp);
 
         // POST request definition
-        Operation postOp = new Operation()
+        Operation postOp = new Operation("POST")
                 .tag("hello")
                 .description("registering user name")
                 .summary("example post method")
@@ -166,7 +173,7 @@ public class HelloAdapter extends HttpPortedAdapter {
                 )
                 .response(new Response("200").content("text/plain").description("user name registered"))
                 .response(new Response("400").description("Invalid request parameters"));
-        addOperationConfig("POST", postOp);
+        addOperationConfig(postOp);
     }
 
 }
