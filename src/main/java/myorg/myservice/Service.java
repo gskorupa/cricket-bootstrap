@@ -27,23 +27,42 @@ import org.cricketmsf.services.MinimalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.HashMap;
+import myorg.myservice.out.MyOutIface;
 
 public class Service extends MinimalService {
     
     private static final Logger logger = LoggerFactory.getLogger(Service.class);
     
     private HashMap<String, String> users;
+    private MyOutIface worker = null;
 
     @EventHook(eventCategory = "*")
     public void processEvent(Event event) {
         logger.info(event.toLogString());
     }
 
+    /**
+     * The event from an inbound adapter can be processed here
+     * 
+     * @param event
+     * @return 
+     */
     @PortEventClassHook(className = "HelloEvent", procedureName = "sayHello")
     public Object handleGreeting(HelloEvent event) {
-        Result result = new StandardResult();
-       
+        
         String name = event.getUserName();
+        
+        Result result = new StandardResult();
+        
+        // A dedicated adapter can be used 
+        worker.printOut(name);
+        // A new event type can be created and send to the microservices kernel
+        // to fire additional business logic asynchronously
+        dispatchEvent(new MyEvent().data(name));
+        
+        // If the dedicated adapter is not used to produce a Result object
+        // then 
+        
         //the name must be registered first
         if(null==users.get(name)){
             result.setCode(404);
@@ -58,7 +77,7 @@ public class Service extends MinimalService {
             result.setData(String.format("Hello %1s! Greetings from %2s.", friendName,name));
         }
         result.setHeader("Content-type", "text/plain");
-        dispatchEvent(new MyEvent().data(name));
+        
         return result;
     }
     
@@ -80,6 +99,7 @@ public class Service extends MinimalService {
     @Override
     public void getAdapters() {
         super.getAdapters();
+        worker=(MyOutIface)getAdaptersMap().get("Worker");
     }
     
     @Override

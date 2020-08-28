@@ -18,6 +18,14 @@
                     "properties": {
                         "context": "/api/hello"
                     }
+                },
+                {
+                    "name": "Worker",
+                    "interfaceName": "",
+                    "classFullName": "myorg.myservice.out.MyOutWorker",
+                    "properties": {
+                        "id": "ABC"
+                    }
                 }
             ]
         }

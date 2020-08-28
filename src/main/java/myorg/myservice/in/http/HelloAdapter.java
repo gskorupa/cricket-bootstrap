@@ -20,7 +20,6 @@ import java.util.HashMap;
 import myorg.myservice.events.HelloEvent;
 import org.cricketmsf.RequestObject;
 import org.cricketmsf.event.ProcedureCall;
-import org.cricketmsf.in.http.HttpAdapterIface;
 import org.cricketmsf.in.http.HttpPortedAdapter;
 import org.cricketmsf.in.openapi.Operation;
 import org.cricketmsf.in.openapi.Parameter;
@@ -29,12 +28,16 @@ import org.cricketmsf.in.openapi.Response;
 import org.cricketmsf.in.openapi.Schema;
 import org.cricketmsf.in.openapi.SchemaFormat;
 import org.cricketmsf.in.openapi.SchemaType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Grzegorz Skorupa <g.skorupa at gmail.com>
  */
 public class HelloAdapter extends HttpPortedAdapter{
+    
+    private static final Logger logger = LoggerFactory.getLogger(HelloAdapter.class);
 
     public static int PARAM_NOT_FOUND = 1;
 
@@ -45,6 +48,7 @@ public class HelloAdapter extends HttpPortedAdapter{
     @Override
     public void loadProperties(HashMap<String, String> properties, String adapterName) {
         super.loadProperties(properties, adapterName);
+        // "context" parameter is read by HttpPortedAdapter class
     }
 
     @Override
