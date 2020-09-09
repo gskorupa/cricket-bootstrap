@@ -13,26 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package myorg.myservice.events;
+package myorg.myservice.out;
 
-import java.util.HashMap;
-import org.cricketmsf.event.EventDecorator;
-import org.cricketmsf.event.EventIface;
-
-public class HelloEvent extends EventDecorator implements EventIface {
-
-    private HashMap<String, String> myData;
-
-    public HelloEvent(String name, String friendName) {
-        super();
-        myData = new HashMap<>();
-        myData.put("name", name);
-        myData.put("friendName", friendName);
-    }
-
-    @Override
-    public Object getData(){
-        return myData;
-    }
-
+/**
+ *
+ * @author greg
+ */
+public interface UserManagerIface {
+    
+    public boolean addUser(String name);
+    public boolean isRegistered(String name);
+    public String getGreeting(String userName, String friendName);
+    public void clear();
 }

@@ -14,3 +14,6 @@ bin
 gradle.properties
 /data/
 /logs/
+/target/
+/gradlefiles/
+/dependency-reduced-pom.xml

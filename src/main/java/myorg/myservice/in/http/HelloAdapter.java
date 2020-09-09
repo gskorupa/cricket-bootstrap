@@ -58,6 +58,8 @@ public class HelloAdapter extends HttpPortedAdapter{
                 return preprocessGet(request);
             case "POST":
                 return preprocessPost(request);
+            case "OPTIONS":
+                return ProcedureCall.respond(200, null);
             default:
                 HashMap<String, Object> err = new HashMap<>();
                 err.put("code", 405); //code<100 || code >1000
