@@ -17,3 +17,4 @@ gradle.properties
 /target/
 /gradlefiles/
 /dependency-reduced-pom.xml
+/nbproject/
