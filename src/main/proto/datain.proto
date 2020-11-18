@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "pl.net.nmg.datain.grpc";
+option java_outer_classname = "DataIn";
+option objc_class_prefix = "DIN";
+
+package datain;
+
+// The greeting service definition.
+service Driver {
+  // Sends an interval data
+  rpc PutIntervalData (IntervalDataRequest) returns (DataReply) {}
+  rpc PutIntervalDataList(stream IntervalDataRequest) returns (DataReply) {}
+}
+
+// The request message containing the user's name.
+message IntervalDataRequest {
+  int64 deviceId = 1;
+  int64 datasourceId = 2;
+  int64 timestamp = 3;
+  int64 rawStatus = 4;
+  int64 status = 5;
+  double value = 6;
+  string timeZone = 7;
+  int64 acquisitionTimestamp = 8;
+}
+
+
+// The response message containing the greetings
+message DataReply {
+  string message = 1;
+}

@@ -5,33 +5,20 @@
         {
             "@type": "org.cricketmsf.config.Configuration",
             "id": "MyService1",
-            "service": "myorg.myservice.MyService",
+            "service": "pl.net.nmg.datain.Service",
             "properties": {
                 "port": "8080",
                 "time-zone": "GMT"
             },
             "ports": [
                 {
-                    "name": "HelloAPI",
-                    "interfaceName": "",
-                    "classFullName": "myorg.myservice.in.http.HelloAdapter",
+                    "name": "dataDB",
+                    "interfaceName": "IntervalDataDao",
+                    "className": "pl.net.nmg.datain.out.db.QuestDB",
                     "properties": {
-                        "context": "/api/hello"
-                    }
-                },
-                {
-                    "name": "Worker",
-                    "interfaceName": "",
-                    "classFullName": "myorg.myservice.out.MyOutWorker",
-                    "properties": {
-                        "id": "ABC"
-                    }
-                },
-                {
-                    "name": "UserManager",
-                    "interfaceName": "",
-                    "classFullName": "myorg.myservice.out.UserManager",
-                    "properties": {
+                        "location": "./qdb",
+                        "intervals": "1000,1001,1002",
+                        "intervals-online": "1100,1101,1002"
                     }
                 }
             ]

@@ -1,28 +1,28 @@
-# Cricket bootstrap project
+# DataIn Service
 
-This is a template of a microservice project based on the Cricket Microservices Framework. 
-To start building a new microservice clone the repository as a new one and follow the instructions below.
+PoC mikroserwisu odbierającego dane z drivera i zapisującego je do bazy timeseries.
+
+Komunikacja odbywa się przy użyciu protokołu gRPC
 
 > This is work in progress. Stay tuned. 
 
 ## Requirements
 
 * Java 13
-* Maven build framework
+* Maven
 
-## Getting started
+## Szybki start
 
-### Building
-
-```
-$ git clone https://github.com/gskorupa/cricket-bootstrap.git myproject
-$ mvn package
-```
-
-### Running
+### Budowanie pakietu
 
 ```
-$ java -jar target/cricket-bootstrap.jar -r
+$ mvn clean install
+```
+
+### Uruchomienie serwisu
+
+```
+$ java -jar target/datain-service.jar -r
 ```
 
 OpenAPI specification of the running service can be accessed at the service path `/api`:
