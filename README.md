@@ -1,4 +1,4 @@
-# DataIn Service
+# Cricket bootstrap
 
 This is a template of a microservice project based on the Cricket Microservices Framework version 2. 
 To start building a new microservice clone the repository as a new one and follow the instructions below.
@@ -10,9 +10,9 @@ To start building a new microservice clone the repository as a new one and follo
 * Java 13
 * Maven
 
-## Szybki start
+## Quick start
 
-### Budowanie pakietu
+### Building
 
 ```
 $ git clone https://github.com/gskorupa/cricket-bootstrap.git myproject
@@ -20,7 +20,7 @@ $ cd myproject
 $ mvn package
 ```
 
-### Uruchomienie serwisu
+### Running
 
 ```
 $ java -jar target/service.jar -r
