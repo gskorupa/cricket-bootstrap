@@ -15,19 +15,11 @@
  * limitations under the License.
  */package myorg.myservice;
 
-import myorg.myservice.events.HelloEvent;
-import myorg.myservice.events.MyEvent;
-import org.cricketmsf.event.Event;
-import org.cricketmsf.annotation.EventHook;
 import org.cricketmsf.services.MinimalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.HashMap;
-import myorg.myservice.events.UserEvent;
 import myorg.myservice.out.MyOutIface;
 import myorg.myservice.out.UserManagerIface;
-import org.cricketmsf.api.StandardResult;
-import org.cricketmsf.event.Procedures;
 
 public class MyService extends MinimalService {
 

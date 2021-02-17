@@ -18,3 +18,4 @@ gradle.properties
 /gradlefiles/
 /dependency-reduced-pom.xml
 /nbproject/
+/qdb/
