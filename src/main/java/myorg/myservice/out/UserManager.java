@@ -34,9 +34,9 @@ public class UserManager extends OutboundAdapter implements Adapter, UserManager
     @Override
     public String getGreeting(String userName, String friendName) {
         if (friendName.isBlank()) {
-            return String.format("Hello %1s!", name);
+            return String.format("Hello %1s!", userName);
         } else {
-            return String.format("Hello %1s! Greetings from %2s.", friendName, name);
+            return String.format("Hello %1s! Greetings from %2s.", friendName, userName);
         }
     }
     

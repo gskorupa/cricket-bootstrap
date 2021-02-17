@@ -15,11 +15,9 @@
  */
 package myorg.myservice.events;
 
-import org.cricketmsf.Event;
-import org.cricketmsf.event.EventDecorator;
-import org.cricketmsf.event.EventIface;
+import org.cricketmsf.event.Event;
 
-public class MyEvent extends EventDecorator implements EventIface {
+public class MyEvent extends Event {
     
     private String data=null;
 
@@ -35,6 +33,7 @@ public class MyEvent extends EventDecorator implements EventIface {
     /**
      * @return the data
      */
+    @Override
     public String getData() {
         return data;
     }

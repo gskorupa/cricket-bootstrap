@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package myorg.myservice.in.http;
+package myorg.myservice.in.hello;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import myorg.myservice.events.HelloEvent;
+import myorg.myservice.events.UserEvent;
 import org.cricketmsf.RequestObject;
 import org.cricketmsf.event.ProcedureCall;
 import org.cricketmsf.in.http.HttpPortedAdapter;
@@ -38,13 +39,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Grzegorz Skorupa <g.skorupa at gmail.com>
  */
-public class HelloAdapter extends HttpPortedAdapter {
+public class HelloHttpAdapter extends HttpPortedAdapter {
 
-    private static final Logger logger = LoggerFactory.getLogger(HelloAdapter.class);
+    private static final Logger logger = LoggerFactory.getLogger(HelloHttpAdapter.class);
 
     public static int PARAM_NOT_FOUND = 1;
 
-    public HelloAdapter() {
+    public HelloHttpAdapter() {
         super();
     }
 
@@ -62,12 +63,12 @@ public class HelloAdapter extends HttpPortedAdapter {
             case "POST":
                 return preprocessPost(request);
             case "OPTIONS":
-                return ProcedureCall.respond(200, null);
+                return ProcedureCall.toRespond(200, null);
             default:
                 HashMap<String, Object> err = new HashMap<>();
                 err.put("code", 405); //code<100 || code >1000
                 err.put("message", String.format("method %1s not allowed", request.method));
-                return ProcedureCall.respond(405, err);
+                return ProcedureCall.toRespond(405, err);
         }
     }
 
@@ -91,7 +92,7 @@ public class HelloAdapter extends HttpPortedAdapter {
             /*
         Forwarding dedicated event type to the service
              */
-            return ProcedureCall.forward(new HelloEvent(name, friend), "sayHello");
+            return ProcedureCall.toForward(new HelloEvent(name, friend));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -112,7 +113,7 @@ public class HelloAdapter extends HttpPortedAdapter {
         String name = (String) request.parameters.getOrDefault("name", "");
         String friend = (String) request.parameters.getOrDefault("friend", "");
         // forwarding dedicated event type to the service
-        return ProcedureCall.forward(new HelloEvent(name, friend), "addUser");
+        return ProcedureCall.toForward(new UserEvent(name, friend));
     }
 
     private ProcedureCall validatePost(RequestObject request) {
@@ -138,7 +139,7 @@ public class HelloAdapter extends HttpPortedAdapter {
             err.put("message" + i, String.format("path parameter '%1s' not found", requiredPathParams.get(i).getName()));
         }
         if (err.size() > 0) {
-            return ProcedureCall.respond(400, err);
+            return ProcedureCall.toRespond(400, err);
         }
 
         // required query params validation

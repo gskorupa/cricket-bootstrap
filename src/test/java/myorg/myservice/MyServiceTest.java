@@ -1,32 +1,65 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package myorg.myservice;
 
-import myorg.myservice.events.HelloEvent;
-import org.cricketmsf.in.http.StandardResult;
-import org.junit.Assert;
-import static org.junit.Assert.assertNotNull;
-import org.junit.BeforeClass;
+import myorg.myservice.out.MyOutIface;
+import myorg.myservice.out.UserManagerIface;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
-public class MyServiceTest extends ServiceSetup {
+/**
+ *
+ * @author greg
+ */
+public class MyServiceTest {
     
-    public MyServiceTest(){
-        super();
+    public MyServiceTest() {
     }
 
     @Test
-    public void testGreetingHandler() {
-        HelloEvent event = new HelloEvent("tester1", "");
-        StandardResult result = (StandardResult) service.handleAddUser(event);
-        Assert.assertEquals(200, result.getCode());
-        result = (StandardResult) service.handleGreeting(event);
-        Assert.assertEquals(200, result.getCode());
+    public void testGetAdapters() {
+        System.out.println("getAdapters");
+        MyService instance = new MyService();
+        instance.getAdapters();
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    @Test
+    public void testRunInitTasks() {
+        System.out.println("runInitTasks");
+        MyService instance = new MyService();
+        instance.getAdapters();
+        //instance.runInitTasks();
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    @Test
+    public void testGetWorker() {
+        System.out.println("getWorker");
+        MyService instance = new MyService();
+        MyOutIface expResult = null;
+        MyOutIface result = instance.getWorker();
+        //assertEquals(expResult, result);
+        //assertNotNull(result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
+    }
+
+    @Test
+    public void testGetUserManager() {
+        System.out.println("getUserManager");
+        MyService instance = new MyService();
+        UserManagerIface expResult = null;
+        UserManagerIface result = instance.getUserManager();
+        //assertEquals(expResult, result);
+        //assertNotNull(result);
+        // TODO review the generated test code and remove the default call to fail.
+        //fail("The test case is a prototype.");
     }
     
-    @Test
-    public void testUserNotRegistered() {
-        service.userManager.clear();
-        HelloEvent event = new HelloEvent("tester1", "");
-        StandardResult result = (StandardResult) service.handleGreeting(event);
-        Assert.assertEquals(404, result.getCode());
-    }
 }

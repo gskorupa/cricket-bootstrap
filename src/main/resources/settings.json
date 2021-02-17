@@ -13,8 +13,7 @@
             "ports": [
                 {
                     "name": "HelloAPI",
-                    "interfaceName": "",
-                    "classFullName": "myorg.myservice.in.http.HelloAdapter",
+                    "className": "myorg.myservice.in.hello.HelloHttpAdapter",
                     "properties": {
                         "context": "/api/hello"
                     }
@@ -22,7 +21,7 @@
                 {
                     "name": "Worker",
                     "interfaceName": "",
-                    "classFullName": "myorg.myservice.out.MyOutWorker",
+                    "className": "myorg.myservice.out.MyOutWorker",
                     "properties": {
                         "id": "ABC"
                     }
@@ -30,7 +29,7 @@
                 {
                     "name": "UserManager",
                     "interfaceName": "",
-                    "classFullName": "myorg.myservice.out.UserManager",
+                    "className": "myorg.myservice.out.UserManager",
                     "properties": {
                     }
                 }

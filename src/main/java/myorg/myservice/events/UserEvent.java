@@ -18,11 +18,11 @@ package myorg.myservice.events;
 import java.util.HashMap;
 import org.cricketmsf.event.Event;
 
-public class HelloEvent extends Event {
+public class UserEvent extends Event {
 
     private HashMap<String, String> myData;
 
-    public HelloEvent(String name, String friendName) {
+    public UserEvent(String name, String friendName) {
         super();
         myData = new HashMap<>();
         myData.put("name", name);
