@@ -87,12 +87,12 @@ public class HelloHttpAdapter extends HttpPortedAdapter {
              */
             String[] pathParams = pathParams = request.pathExt.split("/");
             String name = pathParams.length > 0 ? pathParams[0] : "";
-            String friend = (String) request.parameters.getOrDefault("friend", "");
+            String friendName = (String) request.parameters.getOrDefault("friend", "");
 
             /*
         Forwarding dedicated event type to the service
              */
-            return ProcedureCall.toForward(new HelloEvent(name, friend));
+            return ProcedureCall.toForward(new HelloEvent(name, friendName));
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -126,7 +126,6 @@ public class HelloHttpAdapter extends HttpPortedAdapter {
         /*
         * Validation using the API definition
          */
-
         // required path params validation
         ArrayList<String> pathParamsList = new ArrayList<>();
         Collections.addAll(pathParamsList, request.pathExt.split("/"));
@@ -146,12 +145,12 @@ public class HelloHttpAdapter extends HttpPortedAdapter {
         /*
         check 
          */
-        /*
+ /*
         TODO
          */
-        /* End of API validation */
+ /* End of API validation */
 
-        /*
+ /*
         * Custom validation example
         * The second parameter should be in query and it's optional
         * but we decide that value "world" is not allowed

@@ -6,5 +6,4 @@ package myorg.myservice.out;
  */
 public interface MyOutIface {
     public void printOut(String data);
-    
 }

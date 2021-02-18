@@ -5,7 +5,7 @@
         {
             "@type": "org.cricketmsf.config.Configuration",
             "id": "MyService1",
-            "service": "pl.net.nmg.datain.Service",
+            "service": "myorg.myservice.MyService",
             "properties": {
                 "port": "8080",
                 "time-zone": "GMT"

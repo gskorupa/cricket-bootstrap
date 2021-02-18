@@ -1,14 +1,17 @@
 package myorg.myservice.out;
 
+import org.cricketmsf.Adapter;
+import org.cricketmsf.out.OutboundAdapter;
+
 /**
  *
  * @author greg
  */
-public class MyOutWorker implements MyOutIface{
+public class MyOutWorker extends OutboundAdapter implements Adapter, MyOutIface{
 
     @Override
     public void printOut(String data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("Hi, I'm MyOutWorker");
     }
     
 }

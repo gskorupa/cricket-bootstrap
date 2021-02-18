@@ -25,11 +25,6 @@ public class MyEventRouter {
         this.service=service;
     }
 
-        @EventHook(className="", procedure = Procedures.DEFAULT)
-    public void processEvent(Event event) {
-        logger.info(event.toString());
-    }
-
     /**
      * An event from inbound adapter can be processed here
      *
