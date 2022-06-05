@@ -22,11 +22,11 @@ public class UserEvent extends Event {
 
     private HashMap<String, String> myData;
 
-    public UserEvent(String name, String friendName) {
+    public UserEvent(String name, String action) {
         super();
         myData = new HashMap<>();
         myData.put("name", name);
-        myData.put("friendName", friendName);
+        myData.put("action", action);
     }
 
     @Override

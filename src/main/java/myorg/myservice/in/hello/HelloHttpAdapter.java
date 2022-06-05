@@ -56,7 +56,7 @@ public class HelloHttpAdapter extends HttpPortedAdapter {
     }
 
     @Override
-    protected ProcedureCall preprocess(RequestObject request, long rootEventId) {
+    protected ProcedureCall preprocess(RequestObject request) {
         switch (request.method) {
             case "GET":
                 return preprocessGet(request);
@@ -108,12 +108,16 @@ public class HelloHttpAdapter extends HttpPortedAdapter {
         if (null != validationResult) {
             return validationResult;
         }
-
+        HashMap<String, Object> err = new HashMap<>();
         // the name parameter is required
         String name = (String) request.parameters.getOrDefault("name", "");
-        String friend = (String) request.parameters.getOrDefault("friend", "");
+        if(name.isBlank()){
+            err.put("code", 400);
+            err.put("message", "path parameter 'name' not found or empty");
+            return ProcedureCall.toRespond(400, err);
+        }
         // forwarding dedicated event type to the service
-        return ProcedureCall.toForward(new UserEvent(name, friend));
+        return ProcedureCall.toForward(new UserEvent(name, "add"));
     }
 
     private ProcedureCall validatePost(RequestObject request) {

@@ -31,7 +31,7 @@ public class MyEventRouter {
      * @param event
      * @return
      */
-    @EventHook(className = "myorg.myservice.events.HelloEvent", procedure = Procedures.DEFAULT)
+    @EventHook(className = "myorg.myservice.events.HelloEvent")
     public Object handleGreeting(HelloEvent event) {
 
         HashMap<String, String> eventData = (HashMap) event.getData();
@@ -59,7 +59,7 @@ public class MyEventRouter {
         }
     }
 
-    @EventHook(className = "myorg.myservice.events.UserEvent", procedure = Procedures.DEFAULT)
+    @EventHook(className = "myorg.myservice.events.UserEvent")
     public Object handleAddUser(UserEvent event) {
         StandardResult result = new StandardResult();
         HashMap<String, String> eventData = (HashMap) event.getData();
@@ -70,7 +70,7 @@ public class MyEventRouter {
         return result;
     }
 
-    @EventHook(className = "myorg.myservice.events.MyEvent", procedure=Procedures.DEFAULT)
+    @EventHook(className = "myorg.myservice.events.MyEvent")
     public void doSomething(MyEvent event) {
         service.getWorker().printOut(event.getData());
         logger.info("It's done for " + event.getData());
